@@ -1,23 +1,25 @@
 class Main:
     def __init__(self):
         self.n = int(input())
-        self.answer = 0
+        self.answer = 1
 
     def solve(self):
         low = high = 1
-        target = 0
-        while high <= self.n + 1:  # 자기 자신 포함
-            if target <= self.n:
-                target += high
+        target = 1
+
+        while low <= (self.n // 2) + 1:
+            if target < self.n:
                 high += 1
-            else:
+                target += high
+            elif target > self.n:
                 target -= low
                 low += 1
-
-            if target == self.n:
+            else:
                 self.answer += 1
+                high += 1
+                target += high
 
-        print(self.answer)
+        print(self.answer if self.n > 2 else 1)
 
 
 problem = Main()
