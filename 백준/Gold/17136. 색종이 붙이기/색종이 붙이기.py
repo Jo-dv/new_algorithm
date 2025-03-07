@@ -1,8 +1,6 @@
-import sys
-
 class Main:
     def __init__(self):
-        self.grid = [list(map(int, sys.stdin.readline().split())) for _ in range(10)]
+        self.grid = [list(map(int, input().split())) for _ in range(10)]
         self.paper = [5] * 5  # 색종이 개수
         self.answer = 26
 
