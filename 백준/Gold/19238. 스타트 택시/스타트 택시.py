@@ -47,17 +47,16 @@ class Main:
             return False
         distance, y, x, i = result
 
+        if self.energy < distance:  # 가는 길에 연료가 다 소모되면
+            return False
+        
         if pick:
-            if self.energy <= distance:  # 태우러 가는 길에 연료가 다 소모되면
-                return False
             self.energy -= distance
             self.pick_up = i
         else:
-            if self.energy < distance:  # 태웠는데 목적지에 도착 못하면
-                return False
             self.energy += distance
-            self.arrive[i] = True
             self.pick_up = -1
+            self.arrive[i] = True
         self.y, self.x = y, x
 
         return True
@@ -67,10 +66,10 @@ class Main:
             if sum(self.arrive) == self.m:  # 모든 손님을 다 목적지에 데려다 줬다면
                 print(self.energy)
                 return
-            if not self.move_taxi(True):
+            if not self.move_taxi(True):  # 태우러 감
                 print(-1)
                 return
-            if not self.move_taxi(False):
+            if not self.move_taxi(False):  # 내려주러 감
                 print(-1)
                 return
 
