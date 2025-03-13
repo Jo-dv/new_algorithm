@@ -48,7 +48,7 @@ class Main:
         distance, y, x, i = result
 
         if pick:
-            if self.energy < distance:  # 태우러 가는 길에 연료가 다 소모되면
+            if self.energy <= distance:  # 태우러 가는 길에 연료가 다 소모되면
                 return False
             self.energy -= distance
             self.pick_up = i
