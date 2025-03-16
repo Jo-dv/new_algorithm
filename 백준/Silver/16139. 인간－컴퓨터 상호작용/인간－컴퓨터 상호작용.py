@@ -1,22 +1,16 @@
-class Main:
-    def __init__(self):
-        self.s = input()
-        self.q = int(input())
-        self.queries = [list(input().split()) for _ in range(self.q)]
+import sys
 
-    def solve(self):
-        acc_dict = {chr(i): [0] * (len(self.s) + 1) for i in range(97, 123)}
+s = sys.stdin.readline().rstrip()
+count = [[0] * 26]
+# count = {0 : [0] * 26}
 
-        for i in range(len(self.s)):
-            for c in range(97, 123):  # 'a' ~ 'z'
-                acc_dict[chr(c)][i + 1] = acc_dict[chr(c)][i]  # 이전 값 유지
-            acc_dict[self.s[i]][i + 1] += 1  # 현재 문자를 증가
+q = int(sys.stdin.readline().rstrip())
+for i, ch in enumerate(s):
+    count.append(count[len(count) - 1][:])
+    # count[i + 1] = count[len(count) - 1][:]
+    count[i + 1][ord(ch) - 97] += 1
 
-        for query in self.queries:
-            c, s, e = query
-            s, e = int(s), int(e)
-            print(acc_dict[c][e + 1] - acc_dict[c][s])  # s ~ e 범위의 문자 개수 계산
-
-
-problem = Main()
-problem.solve()
+for _ in range(q):
+    alpha, l, r = sys.stdin.readline().rstrip().split()
+    answer = count[int(r) + 1][ord(alpha) - 97] - count[int(l)][ord(alpha) - 97]
+    print(answer)
