@@ -1,3 +1,7 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+
+
 class Main:
     def __init__(self):
         self.s = input()
