@@ -16,10 +16,12 @@ class Main:
         self.parents[x] = self.find(self.parents[x])
         return self.parents[x]
 
-    def union(self, x, y):
-        x = self.find(x)
-        y = self.find(y)
-        self.parents[x] = y
+    def union(self, gate, next_gate):
+        gate = self.find(gate)
+        next_gate = self.find(next_gate)
+        if gate == next_gate:
+            return 
+        self.parents[gate] = next_gate
 
     def solve(self):
         for airplane in self.airplanes:
