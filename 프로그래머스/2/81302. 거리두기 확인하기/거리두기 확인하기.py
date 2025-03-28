@@ -3,12 +3,7 @@ def search(place):
         ((-1, 0), (-2, 0)), ((1, 0), (2, 0)), ((0, -1), (0, -2)), ((0, 1), (0, 2)),
         ((0, -1), (-1, -1)), ((1, 0), (1, -1)), ((0, -1), (1, -1)), ((0, 1), (1, 1))  # 대각
     ]
-    people = []
-    
-    for i in range(5):  # 데이터 분리
-        for j in range(5):
-            if place[i][j] == "P":
-                people.append((i, j))
+    people = [(i, j) for i in range(5) for j in range(5) if place[i][j] == "P"]  # 데이터 분리
 
     for i in people:
         y, x = i
@@ -26,7 +21,6 @@ def search(place):
 
 def solution(places):
     answer = []
-    people = []
     for i in range(5):
         for j in range(5):
             places[i][j] = list(places[i][j])
