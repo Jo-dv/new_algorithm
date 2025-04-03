@@ -30,7 +30,7 @@ class Main:
         return visited
 
     def solve(self):
-        sources = [node for node in self.graph if self.in_degree[node] == 0 and self.graph[node]]
+        sources = [node for node in self.graph if self.in_degree[node] == 0]
 
         total_received = set()  # 약물을 공급 받는 노드들의 집합
         for src in sources:
