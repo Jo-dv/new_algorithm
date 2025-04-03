@@ -15,8 +15,7 @@ class Main:
             self.in_degree[v] += 1
 
         data = input().split()
-        cnt = int(data[0])
-        self.arrested = set(data[1:]) if cnt > 0 else set()
+        self.arrested = set(data[1:])
 
     def bfs(self, start):
         q = deque([start])
@@ -27,7 +26,7 @@ class Main:
                 if nxt not in self.arrested and nxt not in visited:
                     visited.add(nxt)
                     q.append(nxt)
-        
+
         return visited
 
     def solve(self):
