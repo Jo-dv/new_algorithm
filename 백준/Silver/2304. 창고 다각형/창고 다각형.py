@@ -22,7 +22,7 @@ class Main:
         self.answer += max_height[1]
 
         x, y = self.info[-1]
-        for i in range(self.n-1, max_height_idx-1, -1):
+        for i in range(self.n-2, max_height_idx-1, -1):
             if y <= self.info[i][1]:
                 self.answer += ((x - self.info[i][0]) * y)
                 x, y = self.info[i]
