@@ -27,15 +27,13 @@ def solution(storage, requests):
     n = len(grid)
     m = len(grid[0])
     
-    
     for request in requests:
         if len(request) == 1:
             search(n, m, grid, request)
         else:
-            check = set(request)
             for i in range(1, n):
                 for j in range(1, m):
-                    if grid[i][j] in check:
+                    if grid[i][j] in request:
                         grid[i][j] = "0"
                         
     for i in range(1, n):
