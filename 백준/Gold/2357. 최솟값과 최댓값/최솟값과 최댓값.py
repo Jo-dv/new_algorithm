@@ -1,3 +1,7 @@
+import sys
+input = lambda: sys.stdin.readline().rstrip()
+
+
 class Main:
     def __init__(self):
         self.n, self.m = map(int, input().split())
@@ -5,6 +9,7 @@ class Main:
         self.pair = [tuple(map(lambda x: int(x) - 1, input().split())) for _ in range(self.m)]
         self.min_tree = [0] * (4 * self.n)
         self.max_tree = [0] * (4 * self.n)
+        self.answer = []
 
     def min_build(self, node, left, right):
         if left == right:
@@ -59,7 +64,9 @@ class Main:
         for a, b in self.pair:
             min_val = self.min_query(0, 0, self.n-1, a, b)
             max_val = self.max_query(0, 0, self.n-1, a, b)
-            print(min_val, max_val)
+            self.answer.append(f"{min_val} {max_val}")
+
+        print("\n".join(self.answer))
 
 
 problem = Main()
