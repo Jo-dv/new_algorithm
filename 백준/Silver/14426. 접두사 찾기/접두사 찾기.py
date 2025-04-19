@@ -1,9 +1,12 @@
 from collections import defaultdict
+import sys
+input = lambda: sys.stdin.readline().rstrip()
 
 
 class Node:
     def __init__(self):
         self.child = defaultdict(Node)
+        self.end = False
 
 
 class Main:
@@ -20,6 +23,8 @@ class Main:
             for ch in standard:
                 current = current.child[ch]
 
+            current.end = True
+
     def search(self, prefix):
         current = self.root
 
@@ -27,6 +32,8 @@ class Main:
             if ch not in current.child:
                 return False
             current = current.child[ch]
+            if current.end:
+                return True
 
         return True
 
