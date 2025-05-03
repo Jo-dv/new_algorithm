@@ -5,8 +5,8 @@ class Main:
         self.info = [list(map(int, input().split())) for _ in range(self.k)]
         self.answer = float('inf')
 
-    def rotate(self, arr, info):
-        r, c, s = info
+    def rotate(self, arr, idx):
+        r, c, s = self.info[idx]
         temp = [row[:] for row in arr]
 
         for layer in range(1, s + 1):
@@ -39,7 +39,7 @@ class Main:
                 continue
 
             used[i] = True
-            temp = self.rotate(arr, self.info[i])
+            temp = self.rotate(arr, i)
             self.search(used, temp, depth+1)
             used[i] = False
 
