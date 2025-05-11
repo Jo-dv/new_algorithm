@@ -15,9 +15,8 @@ class Main:
             p, w = player
             heapq.heappush(squad[p], -w)
 
-        best = None
+        best = [0] * 12
         for _ in range(self.k):
-            best = [0] * 12
             for i in range(1, 12):
                 if squad[i] and squad[i][0] < 0:
                     heapq.heapreplace(squad[i], squad[i][0] + 1)
