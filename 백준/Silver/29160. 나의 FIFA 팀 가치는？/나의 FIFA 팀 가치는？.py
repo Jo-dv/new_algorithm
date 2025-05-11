@@ -20,8 +20,7 @@ class Main:
             best = [0] * 12
             for i in range(1, 12):
                 if squad[i] and squad[i][0] < 0:
-                    player = heapq.heappop(squad[i])
-                    heapq.heappush(squad[i], player + 1)
+                    heapq.heapreplace(squad[i], squad[i][0] + 1)
                     best[i] = -squad[i][0]
 
         print(sum(best))
