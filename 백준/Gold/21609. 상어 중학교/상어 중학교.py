@@ -11,13 +11,12 @@ class Main:
         return 0 <= y < self.n and 0 <= x < self.n and not visited[y][x]
 
     def find_blocks(self):
-        max_group = []
-        max_rainbow = 0
+        best = []
         visited = [[False] * self.n for _ in range(self.n)]
 
         for y in range(self.n):
             for x in range(self.n):
-                if not visited[y][x] and 1 <= self.grid[y][x]:
+                if 1 <= self.grid[y][x]:
                     standard, total_cord, rainbow_cnt = self.grid[y][x], [(y, x)], 0
                     dq = deque([(y, x)])
                     visited[y][x] = True
@@ -38,11 +37,11 @@ class Main:
                         if self.grid[cy][cx] == 0:
                             visited[cy][cx] = False
 
-                    if len(max_group) < len(total_cord) or (len(max_group) == len(total_cord) and max_rainbow <= rainbow_cnt):
-                        max_group = total_cord
-                        max_rainbow = rainbow_cnt
+                    if len(total_cord) >= 2:
+                        best.append((y, x, total_cord, rainbow_cnt))
 
-        return max_group
+        best.sort(key=lambda i: (-len(i[2]), -i[3], -i[0], -i[1]))
+        return best[0] if best else []
 
     def remove_blocks(self, blocks):
         self.answer += len(blocks)**2
@@ -83,10 +82,10 @@ class Main:
 
     def solve(self):
         while True:
-            blocks = self.find_blocks()
-            if len(blocks) < 2:
+            blocks = self.find_blocks()  # standard_y, standard_x, blocks_cord, rainbow_cnt
+            if not blocks:
                 break
-            self.remove_blocks(blocks)
+            self.remove_blocks(blocks[2])
             self.down_blocks()
             self.rotate_blocks()
             self.down_blocks()
