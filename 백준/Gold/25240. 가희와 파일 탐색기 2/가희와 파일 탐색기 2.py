@@ -2,7 +2,6 @@ from collections import defaultdict
 import sys
 input = lambda: sys.stdin.readline().rstrip()
 
-
 class Main:
     def __init__(self):
         self.u, self.f = map(int, input().split())
@@ -10,41 +9,50 @@ class Main:
         self.files = [input() for _ in range(self.f)]
         self.q = int(input())
         self.queries = [input() for _ in range(self.q)]
-        self.answer = []
 
     def solve(self):
         group_info = defaultdict(set)
-        file_info = defaultdict(list)
-        file_permission = dict()
+        file_info = dict()
         operator = {"R": 4, "W": 2, "X": 1}
 
+        # 유저 정보
         for info in self.users:
-            user = info.split()
-            name = user[0]
-            group_info[name].add(name)  # 유저는 기본적으로 자기 이름과 동일한 그룹에 속함
-            if len(user) > 1:
-                group = user[1].split(",")
-                for i in group:
-                    group_info[name].add(i)
+            parts = info.split()
+            name = parts[0]
+            group_info[name].add(name)  # 자기 이름 그룹 자동 포함
+            if len(parts) > 1:
+                for g in parts[1].split(","):
+                    group_info[name].add(g)
 
+        # 파일 정보
         for info in self.files:
-            file = info.split()
-            name, permission, owner, group = file
-            file_info[name].append(owner)
-            file_info[name].append(group)
-            file_permission[name] = list(map(int, permission))
+            name, permission, owner, group = info.split()
+            perm_list = list(map(int, permission))
+            file_info[name] = {
+                "owner": owner,
+                "group": group,
+                "perm": perm_list
+            }
 
+        # 쿼리 처리
+        result = []
         for query in self.queries:
             user, file, operation = query.split()
-            if file_info[file][0] == user:
-                self.answer.append(1 if file_permission[file][0] & operator[operation] != 0 else 0)
-            elif file_info[file][1] in group_info[user]:
-                self.answer.append(1 if file_permission[file][1] & operator[operation] != 0 else 0)
-            else:
-                self.answer.append(1 if file_permission[file][2] & operator[operation] != 0 else 0)
+            owner = file_info[file]["owner"]
+            group = file_info[file]["group"]
+            perm = file_info[file]["perm"]
+            op_bit = operator[operation]
 
-        for i in self.answer:
-            print(i)
+            if user == owner:
+                level = 0  # OWNER
+            elif group in group_info[user]:
+                level = 1  # GROUP
+            else:
+                level = 2  # OTHER
+
+            result.append("1" if perm[level] & op_bit else "0")
+
+        print("\n".join(result))
 
 
 problem = Main()
