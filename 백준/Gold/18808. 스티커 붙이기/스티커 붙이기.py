@@ -14,29 +14,33 @@ class Main:
         self.answer = 0
 
     def attach(self, sticker):
-        target = sum(sum(i) for i in sticker)
-
         for _ in range(4):
-            width = len(sticker[0])
             height = len(sticker)
+            width = len(sticker[0])
             for y in range(self.n - height + 1):
                 for x in range(self.m - width + 1):
-                    new_grid = [i[:] for i in self.grid]
-                    cnt = 0
-                    for i in range(height):
-                        for j in range(width):
-                            if sticker[i][j] == 1 and self.grid[y+i][x+j] == 0:
-                                new_grid[y+i][x+j] = sticker[i][j]
-                                cnt += 1
-
-                    if cnt == target:
-                        self.grid = new_grid
+                    if self.can_attach(sticker, y, x):
+                        self.do_attach(sticker, y, x)
                         return
 
-            rotate_sticker = []
-            for i in zip(*sticker[::-1]):
-                rotate_sticker.append(list(i))
-            sticker = rotate_sticker
+            sticker = [list(row) for row in zip(*sticker[::-1])]
+
+    def can_attach(self, sticker, y, x):
+        height = len(sticker)
+        width = len(sticker[0])
+        for i in range(height):
+            for j in range(width):
+                if sticker[i][j] == 1 and self.grid[y + i][x + j] == 1:
+                    return False
+        return True
+
+    def do_attach(self, sticker, y, x):
+        height = len(sticker)
+        width = len(sticker[0])
+        for i in range(height):
+            for j in range(width):
+                if sticker[i][j] == 1:
+                    self.grid[y + i][x + j] = 1
 
     def count_space(self):
         self.answer = sum(sum(i) for i in self.grid)
