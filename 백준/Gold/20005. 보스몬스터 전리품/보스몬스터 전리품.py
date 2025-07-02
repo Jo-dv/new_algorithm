@@ -1,7 +1,7 @@
 import sys
 from collections import deque
-input = lambda: sys.stdin.readline().rstrip()
 
+input = lambda: sys.stdin.readline().rstrip()
 
 class Main:
     def __init__(self):
@@ -17,28 +17,31 @@ class Main:
                 if self.grid[y][x] == "B":
                     return y, x
 
-    def find_player(self):
-        result = []
-        for y in range(self.m):
-            for x in range(self.n):
-                if self.grid[y][x].islower():
-                    result.append((self.grid[y][x], y, x))
-        return result
+    def boss_bfs(self):
+        visited = [[-1] * self.n for _ in range(self.m)]
+        dq = deque()
+        y, x = self.boss
+        dq.append((y, x, 0))
+        visited[y][x] = 0
 
-    def move(self, info):
-        visited = [[False] * self.n for _ in range(self.m)]
-        player, y, x = info
-        visited[y][x] = True
-        dq = deque([(y, x, 0)])
+        # 각 플레이어의 최소 도착 시간
+        player_arrival = dict()
+
         while dq:
             cy, cx, time = dq.popleft()
-            if (cy, cx) == self.boss:
-                return player, time
-            for dy, dx in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-                my, mx = cy + dy, cx + dx
-                if 0 <= my < self.m and 0 <= mx < self.n and not visited[my][mx] and self.grid[my][mx] != "X":
-                    dq.append((my, mx, time+1))
-                    visited[my][mx] = True
+
+            for dy, dx in [(-1,0), (1,0), (0,-1), (0,1)]:
+                ny, nx = cy + dy, cx + dx
+                if 0 <= ny < self.m and 0 <= nx < self.n:
+                    if self.grid[ny][nx] != "X" and visited[ny][nx] == -1:
+                        visited[ny][nx] = time + 1
+                        dq.append((ny, nx, time + 1))
+
+                        if self.grid[ny][nx].islower():
+                            player = self.grid[ny][nx]
+                            player_arrival[player] = time + 1
+
+        return [(player_id, player_arrival[player_id]) for player_id, _ in self.players if player_id in player_arrival]
 
     def attack(self, players_arrival):
         dps_table = {player: int(dps) for player, dps in self.players}
@@ -51,20 +54,17 @@ class Main:
         active_players = set()
 
         while True:
-            # 플레이어들이 현재 시간에 도착 -> 참여 인원과 dps 증가
             while idx < len(players_arrival) and players_arrival[idx][1] == cur_time:
                 player_id = players_arrival[idx][0]
                 active_players.add(player_id)
                 total_dps += dps_table[player_id]
                 idx += 1
 
-            # 다음 이벤트(다음 플레이어 도착) 시각
             if idx < len(players_arrival):
                 next_time = players_arrival[idx][1]
             else:
                 next_time = float('inf')
 
-            # 이번 구간에서 줄어드는 hp 계산
             time_interval = next_time - cur_time
             damage = time_interval * total_dps
 
@@ -76,14 +76,9 @@ class Main:
 
     def solve(self):
         self.boss = self.find_boss()
-        players_pos = self.find_player()
-        players_arrival = []
-        for player in players_pos:
-            players_arrival.append(self.move(player))
-
+        players_arrival = self.boss_bfs()
         answer = self.attack(players_arrival)
         print(answer)
-
 
 problem = Main()
 problem.solve()
